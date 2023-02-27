@@ -27,6 +27,9 @@ console.log(method, id, title, completed);
   }
   if (method === "get") {
     const result = await getById(id);
+    if (!result) {
+      throw new Error(`Product with ${id} not found`);
+    }
     console.log(result);
   }
   if (method === "create") {
@@ -34,18 +37,12 @@ console.log(method, id, title, completed);
     console.log(result);
   }
   if (method === "update") {
-    const taskToUpdate = await updateTask(title, completed);
-    //   const tasks = await getAll();
+    const taskToUpdate = await updateTask(id, title, completed);
     console.log(taskToUpdate);
-    //   console.table(tasks);
+    if (!taskToUpdate) {
+      throw new Error(`Product with ${id} not found`);
+    }
   }
-  //   if (method === "update") {
-  //     const taskToUpdate = await updateTask(id, title, completed);
-  //     console.log(taskToUpdate);
-  //     if (!taskToUpdate) {
-  //       throw new Error(`Product with ${id} not found`);
-  //     }
-  //   }
   if (method === "delete") {
     await deleteTask(id);
   }
