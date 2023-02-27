@@ -6,7 +6,6 @@ const taskPath = path.resolve(__dirname, "..", "db", "tasks.json");
 
 const getAll = async () => {
   try {
-    //результат виклику записуэмо у зминну
     const rawData = await fs.readFile(taskPath, "utf-8");
     return JSON.parse(rawData, null, 2);
   } catch (error) {
@@ -16,7 +15,6 @@ const getAll = async () => {
 
 const getById = async (id) => {
   try {
-    //створюємо константу, в яку записуємо рез-т виклику функції getAll
     const tasks = await getAll();
     tasks.find((task) => String(task.id) === String(id));
   } catch (error) {
@@ -37,79 +35,25 @@ const createTask = async (title, completed) => {
   }
 };
 
-// const updateTask = async (taskId, title, completed) => {
-//   try {
-//     const tasks = await getAll();
-//     const idx = tasks.findIndex(({ id }) => String(id) === String(taskId));
-//     if (idx === -1) {
-//       return null;
-//     }
-//     if (title) {
-//       tasks[idx].title = title;
-//     }
-//     if (completed) {
-//       tasks[idx].completed = completed;
-//     }
-//     await fs.writeFile(taskPath, JSON.stringify(tasks, null, 4));
-//     return tasks[idx];
-//   } catch (error) {
-//     console.log(`Something went wrong. ${error.message}`);
-//   }
-// };
-
-const updateTask = async (id, title, completed) => {
+const updateTask = async (taskId, title, completed) => {
   try {
     const tasks = await getAll();
-    const taskToUpdate = tasks.find(
-      (task) => String(task.title) === String(title)
-    );
+    const idx = tasks.findIndex(({ id }) => String(id) === String(taskId));
+    if (idx === -1) {
+      return null;
+    }
     if (title) {
-      task.title = title;
+      tasks[idx].title = title;
     }
     if (completed) {
-      tasks.completed = completed;
+      tasks[idx].completed = completed;
     }
     await fs.writeFile(taskPath, JSON.stringify(tasks, null, 4));
-    return taskToUpdate;
-
-    //       editToDo(toDoId, newLabel) {
-    //   const toDoToEdit = this.ToDoItems.find((item) => item.id === toDoId);
-    //   toDoToEdit.label = newLabel;
-    // }
+    return tasks[idx];
   } catch (error) {
-    console.log(error.message);
+    console.log(`Something went wrong. ${error.message}`);
   }
 };
-// const updateTask = async (title, completed) => {
-//   try {
-//     const tasks = await getAll();
-//       const updatedTask = tasks.find((task) =>
-//           String(task.title) === String(title));
-//     if (title) {
-//         task.title = title;
-//     }
-//       if (completed) {
-//           task.completed = completed;
-//       }
-// await fs.writeFile(tasksPath, JSON.stringify(tasks, null, 4));
-//     return updatedTask;
-
-// //       if (found) {
-// //     found.status = 2; found.result = 0;
-// //       }
-
-// //       var found = list.find((obj) => {
-// //     return obj.id === 1;
-// // });
-// // Изменяйте необходимые свойства простым переопределением:
-
-// // if (found) {
-// //     found.status = 2; found.result = 0;
-// // }
-
-//   } catch (error) {
-//     console.log(error);
-// };
 
 const deleteTask = async (id) => {
   try {
